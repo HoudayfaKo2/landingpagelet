@@ -1,0 +1,141 @@
+<?php
+
+session_start();
+
+$user = "root";  
+$password = "";  
+$host = "127.0.0.1";  
+$dbase = "let";  
+
+$bdd = new PDO("mysql:dbname=".$dbase.";host=".$host, $user, $password);
+
+    if(isset($_POST['form'])){
+        if(isset($_POST['email'])){
+            if(!empty($_POST['email'])){
+                $newsletter = htmlspecialchars($_POST['email']);
+                if(filter_var($newsletter, FILTER_VALIDATE_EMAIL)) {
+                    $reqmail = $bdd->prepare("SELECT * FROM users WHERE email = ?");
+                    $reqmail->execute(array($newsletter));
+                    $mailexist = $reqmail->rowCount();
+                    if($mailexist == 0){
+                        $sql = $bdd->prepare('INSERT INTO users(email,ip,dates) VALUES (?,?,NOW())');
+                        $sql->execute(array($newsletter,$_SERVER['REMOTE_ADDR']));
+                    } else {
+                        $erreur = "You are already subscriber to our Newsletter. (Vous êtes déjà abonné(e) à notre Newsletter)";
+                        $_SESSION['error'] = $erreur;
+                    }
+                } else{
+                    $erreur = "You  must enter an e-mail address. (Vous devez indiquer une adresse e-mail)";
+                    $_SESSION['error'] = $erreur;
+                }
+            } else{
+                $erreur = "You must fill all the empty fields (Vous devez remplir tout les champs vides)";
+                $_SESSION['error'] = $erreur;
+            }
+        }
+    }
+    if(isset($_SESSION['error'])){
+        echo $_SESSION['error'];
+        session_destroy();
+    }
+?>
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119564454-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+
+            gtag('config', 'UA-119564454-2');
+
+        </script>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>LET - Equipe</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet" />
+        <link rel="stylesheet" href="hover.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="icon" href="../icone.ico">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.css" />
+        <!--FB-->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="LET | Equipe " />
+        <meta property="og:description" content=" Présentation de l'équipe de gestion.
+" />
+        <meta property="og:image" content="https://zupimages.net/up/19/18/hy0z.png" />
+        <meta property="og:url" content="https://let.community/" />
+        <meta property="og:site_name" content="LearnEnglishTogether" />
+        <!--TW-->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@LET_officiel" />
+        <meta name="twitter:title" content="LET | Equipe " />
+        <meta name="twitter:description" content="Présentation de l'équipe de gestion." />
+        <meta name="twitter:image" content="https://zupimages.net/up/19/18/hy0z.png" />
+
+    </head>
+
+    <body>
+        <div class="container text-center ">
+            <div class="home ">
+
+                <img class="reverse mt-5 animated fadeInDown " style="margin-top:150px !important;" src="reverse.png" alt="reverse">
+
+            </div>
+            <div class="text-left p-5 text-center">
+
+                <h1 class="ttl ">Notre objectif : populariser l'apprentissage de la langue de manière sociale sur internet.
+                    <internet class=""></internet>
+                </h1>
+                <p class="texta"> Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker. </p>
+
+                <div class="bgo">
+                    <img src="https://cdn.discordapp.com/attachments/438787512903794718/631207252292009984/maquette.png
+" class="fuite">
+                </div>
+                <h1 class="ttl">Petit </h1>
+                <p class="texta"> Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker. </p>
+            </div>
+            <div style="margin: 0px 0 85px 0;">
+                <a target="_BLANK" href="https://discord.gg/MY5N5Tg" style="text-decoration: none; background-color:#005aff;" class=" box2 hvr-float ">
+            <span id="know" class="box"> <i class="fas fa-user-friends mr-1"></i> Rejoindre l'équipe </span>
+        </a>
+
+                <a target="_BLANK" href="https://discord.gg/MY5N5Tg" style="text-decoration: none; background-color:#005aff;" class=" box2 hvr-float ">
+            <span id="know" class="box"><i class="fab fa-paypal mr-1"></i>   Faire un don </span>
+        </a>
+            </div>
+
+        </div>
+        <div class="end">
+
+            <h1 class="ttl mb-5" style="color:white;">Pré-inscription pour la beta. </h1>
+
+            <form method="POST" class="formo mb-5" style="margin-bottom:100px !important;">
+                <input title="deode" placeholder="e-mail" type="email" name="email" title="deedde">
+                <input class="logino hvr-float " type="submit" name="form" value="S'inscrire">
+            </form>
+        </div>
+
+        <style>
+
+
+        </style>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+
+    </html>
